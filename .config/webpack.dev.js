@@ -29,15 +29,15 @@ module.exports = merge(common, {
   module: {
     rules: [
       {
-        test: /\.mjml$/i,
+        test: /\.twig$/i,
         use: [
           {
             loader: 'file-loader',
             options: {
               name (resourcePath) {
                 const customPath = resourcePath
-                  .replace(/^.*templates/, '')
-                  .replace(/mjml/, 'html')
+                  .replace(/^.*mails/, '')
+                  .replace(/twig/, 'html')
 
                 return customPath
               }
@@ -57,10 +57,10 @@ module.exports = merge(common, {
               data: (() => {
                 let data
 
-                requireContext(path.resolve(__dirname, '../src/data'), true, /\.yml$/)
+                requireContext(path.resolve(__dirname, '../src/data/shopify'), false, /\.yml$/)
                   .keys()
                   .forEach(file => {
-                    const contents = fs.readFileSync(path.resolve(__dirname, `../src/data/${file}`))
+                    const contents = fs.readFileSync(path.resolve(__dirname, `../src/data/shopify/${file}`))
                     data = { ...data, ...yaml.load(contents) }
                   })
 
@@ -72,6 +72,23 @@ module.exports = merge(common, {
             loader: 'webpack-mjml-loader',
             options: {
               filePath: path.resolve(__dirname, '../src')
+            }
+          },
+          {
+            loader: 'twig-html-loader',
+            options: {
+              data: (() => {
+                let data = {}
+
+                requireContext(path.resolve(__dirname, '../src/data'), false, /\.yml$/)
+                  .keys()
+                  .forEach(file => {
+                    const contents = fs.readFileSync(path.resolve(__dirname, `../src/data/${file}`))
+                    data = { ...data, ...yaml.load(contents) }
+                  })
+
+                return data
+              })
             }
           }
         ]

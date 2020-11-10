@@ -1,0 +1,27 @@
+<mj-wrapper background-color="{{ style.color.secondary }}">
+  <mj-section padding="20px">
+    <mj-column>
+      <mj-text align="center">
+        <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, repellendus.</span>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+
+  <mj-section padding="0 40px">
+    <mj-column>
+      <mj-divider></mj-divider>
+    </mj-column>
+  </mj-section>
+
+  <mj-section padding="20px">
+    <mj-column>
+      <mj-social icon-size="24px" mode="horizontal">
+        {% for element in data.social %}
+          <mj-social-element src="{{ element.icon }}" href="{{ element.url }}">
+            {{ element.name }}
+          </mj-social-element>
+        {% endfor %}
+      </mj-social>
+    </mj-column>
+  </mj-section>
+</mj-wrapper>

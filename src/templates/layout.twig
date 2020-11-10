@@ -1,0 +1,47 @@
+<mjml lang="{% block language %}de{% endblock %}">
+  {% block head %}
+    <mj-head>
+      {# set the title of the document. #}
+      <mj-title>
+        {% block title %}{{ data.title }}{% endblock %}
+      </mj-title>
+
+      {# set the preview that will be displayed in the inbox of the recipient. #}
+      <mj-preview>
+        {% block preview %}{{ data.preview }}{% endblock %}
+      </mj-preview>
+
+      {#  control on which breakpoint the layout should go desktop/mobile. #}
+      <mj-breakpoint width="{% block breakpoint %}360px{% endblock %}" />
+
+      {#  import fonts #}
+      {% block font %}
+        <mj-font name="Open Sans" href="https://fonts.googleapis.com/css?family=Open+Sans:wght@400;700" />
+      {% endblock %}
+
+      {# modify default attributes on a mj-tag and add mj-classes. #}
+      <mj-attributes>
+        {% block attributes %}
+          {% include 'styling/attributes.twig' %}
+        {% endblock %}
+      </mj-attributes>
+
+      {# set CSS styles that will be applied to the HTML in your MJML document as well as the HTML outputted. #}
+      <mj-style inline="inline">
+        {% block style %}
+          {% include 'styling/style.twig' %}
+        {% endblock %}
+      </mj-style>
+    </mj-head>
+  {% endblock %}
+
+  {% block body %}
+    <mj-body>
+      {% include 'partials/header.twig' %}
+
+      {% block content %}{% endblock %}
+
+      {% include 'partials/footer.twig' %}
+    </mj-body>
+  {% endblock body %}
+</mjml>

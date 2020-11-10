@@ -1,0 +1,20 @@
+data:
+  title: 'mjml-mails'
+  preview: 'this is an inbox preview text'
+  nav:
+    - name: 'Home'
+      url: '/'
+    - name: 'Products'
+      url: '/'
+    - name: 'About'
+      url: '/'
+  social:
+    - name: 'facebook'
+      url: 'https://facebook.com'
+      icon: 'https://img.icons8.com/ios-glyphs/2x/facebook.png'
+    - name: 'instagram'
+      url: 'https://instagram.com'
+      icon: 'https://img.icons8.com/ios-glyphs/2x/instagram-new.png'
+    - name: 'twitter'
+      url: 'https://twitter.com'
+      icon: 'https://img.icons8.com/ios-glyphs/2x/twitter.png'

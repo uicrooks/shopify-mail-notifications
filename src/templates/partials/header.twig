@@ -1,0 +1,24 @@
+<mj-section mj-class="bg-primary" padding="20px">
+  <mj-column>
+    <mj-text 
+      font-size="20px"
+      color="#fff"
+    >
+      mjml-mails
+    </mj-text>
+  </mj-column>
+</mj-section>
+
+<mj-section mj-class="bg-secondary">
+  <mj-column padding="10px 20px">
+    <mj-navbar 
+      base-url="/" 
+      hamburger="hamburger" 
+      ico-color="#000"
+    >
+      {% for element in data.nav %}
+        <mj-navbar-link href="{{ element.url }}">{{ element.name }}</mj-navbar-link>
+      {% endfor %}
+    </mj-navbar>
+  </mj-column>
+</mj-section>
