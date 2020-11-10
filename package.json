@@ -1,8 +1,8 @@
 {
-  "name": "mjml",
+  "name": "shopify-mails",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "Sergej Samsonenko <contact@sergej.codes>",
+  "license": "MIT",
   "scripts": {
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config .config/webpack.prod.js && rm dist/main.js",
     "dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack serve --config .config/webpack.dev.js"

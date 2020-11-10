@@ -1,1 +1,1 @@
-## Store mail templates
+## Shopify Mails
