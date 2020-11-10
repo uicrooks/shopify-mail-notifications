@@ -1,7 +1,7 @@
-<mj-wrapper background-color="{{ style.color.secondary }}">
+<mj-wrapper background-color="{{ style.color.primary }}">
   <mj-section padding="20px">
     <mj-column>
-      <mj-text align="center">
+      <mj-text align="center" color="white">
         <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, repellendus.</span>
       </mj-text>
     </mj-column>
@@ -17,7 +17,12 @@
     <mj-column>
       <mj-social icon-size="24px" mode="horizontal">
         {% for element in data.social %}
-          <mj-social-element src="{{ element.icon }}" href="{{ element.url }}">
+          <mj-social-element
+            src="{{ element.icon }}"
+            href="{{ element.url }}"
+            padding="0 5px"
+            color="white"
+          >
             {{ element.name }}
           </mj-social-element>
         {% endfor %}

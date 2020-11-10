@@ -1,19 +1,19 @@
 <mj-section mj-class="bg-primary" padding="20px">
   <mj-column>
-    <mj-text 
+    <mj-text
       font-size="20px"
       color="#fff"
     >
-      mjml-mails
+      {{ data.title }}
     </mj-text>
   </mj-column>
 </mj-section>
 
 <mj-section mj-class="bg-secondary">
   <mj-column padding="10px 20px">
-    <mj-navbar 
-      base-url="/" 
-      hamburger="hamburger" 
+    <mj-navbar
+      base-url="/"
+      hamburger="hamburger"
       ico-color="#000"
     >
       {% for element in data.nav %}
