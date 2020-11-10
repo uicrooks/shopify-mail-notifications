@@ -80,7 +80,11 @@ module.exports = {
             loader: 'twig-html-loader',
             options: {
               data: (() => {
-                let data = {}
+                let data = {
+                  env: process.env.NODE_ENV,
+                  development: process.env.NODE_ENV === 'development',
+                  production: process.env.NODE_ENV === 'production'
+                }
 
                 requireContext(path.resolve(__dirname, '../src/data'), false, /\.yml$/)
                   .keys()
