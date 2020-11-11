@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const yaml = require('js-yaml')
 const requireContext = require('require-context')
 const CopyPlugin = require('copy-webpack-plugin')
+const package = require('../package.json')
 
 module.exports = {
   stats: 'minimal',
@@ -40,7 +41,7 @@ module.exports = {
           [{
             loader: 'webpack-html-script-insert-loader',
             options: {
-              src: 'main.js',
+              src: `http://localhost:${package.config.devServerPort}/main.js`,
               location: 'body'
             }
           }] : [],
