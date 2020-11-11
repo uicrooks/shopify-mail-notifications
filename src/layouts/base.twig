@@ -16,20 +16,22 @@
 
       {#  import fonts #}
       {% block font %}
-        <mj-font name="Open Sans" href="https://fonts.googleapis.com/css?family=Open+Sans:wght@400;700" />
+        {% if production %}
+          <mj-font name="Open Sans" href="{{ style['google-fonts'] }}" />
+        {% endif %}
       {% endblock %}
 
       {# modify default attributes on a mj-tag and add mj-classes. #}
       <mj-attributes>
         {% block attributes %}
-          {% include 'styling/attributes.twig' %}
+          {% include '@components::global/attributes.twig' %}
         {% endblock %}
       </mj-attributes>
 
       {# set CSS styles that will be applied to the HTML in your MJML document as well as the HTML outputted. #}
       <mj-style inline="inline">
         {% block style %}
-          {% include 'styling/style.twig' %}
+          {% include '@components::global/style.twig' %}
         {% endblock %}
       </mj-style>
     </mj-head>
@@ -37,11 +39,11 @@
 
   {% block body %}
     <mj-body>
-      {% include 'partials/header.twig' %}
+      {% include '@components::global/header.twig' %}
 
       {% block content %}{% endblock %}
 
-      {% include 'partials/footer.twig' %}
+      {% include '@components::global/footer.twig' %}
     </mj-body>
   {% endblock body %}
 </mjml>

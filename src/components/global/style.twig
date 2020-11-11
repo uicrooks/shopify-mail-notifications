@@ -1,5 +1,9 @@
-{# 
+{#
  # you can write regular css here
  # .my-class { color: red }
  # reference it like this: <mj-text css-class="my-class"></mj-text>
  #}
+
+{% if development %}
+  @import url('{{ style['google-fonts'] }}');
+{% endif %}
