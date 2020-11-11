@@ -88,6 +88,7 @@ module.exports = {
               },
               data: (context) => {
                 let data = {
+                  server: `http://localhost:${package.config.devServerPort}`,
                   env: process.env.NODE_ENV,
                   development: process.env.NODE_ENV === 'development',
                   production: process.env.NODE_ENV === 'production'
