@@ -1,4 +1,4 @@
 /**
- * auto import all mail files
+ * auto import all template files
  */
-import '@/mails/index.twig'
+require.context('@/templates', true, /\.twig$/)
