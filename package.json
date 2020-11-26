@@ -11,6 +11,8 @@
     "dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack serve --config .config/webpack.dev.js"
   },
   "devDependencies": {
+    "boxen": "^4.2.0",
+    "chalk": "^4.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.3.0",
     "cross-env": "^7.0.2",
@@ -20,7 +22,7 @@
     "js-yaml": "^3.14.0",
     "liquid-template-loader": "^0.2.2",
     "mjml": "^4.7.1",
-    "progress-bar-webpack-plugin": "^2.1.0",
+    "progress-webpack-plugin": "^1.0.11",
     "require-context": "^1.1.0",
     "twig-html-loader": "^0.1.8",
     "webpack": "^5.4.0",

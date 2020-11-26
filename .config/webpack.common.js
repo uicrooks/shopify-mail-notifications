@@ -1,11 +1,12 @@
 const path = require('path')
 const fs = require('fs-extra')
-const ProgressBarPlugin = require('progress-bar-webpack-plugin')
+const ProgressPlugin = require('progress-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const yaml = require('js-yaml')
 const requireContext = require('require-context')
-const CopyPlugin = require('copy-webpack-plugin')
 const package = require('../package.json')
+
+const server = `http://localhost:${package.config.devServerPort}`
 
 module.exports = {
   stats: 'minimal',
@@ -41,7 +42,7 @@ module.exports = {
           [{
             loader: 'webpack-html-script-insert-loader',
             options: {
-              src: `http://localhost:${package.config.devServerPort}/main.js`,
+              src: `${server}/main.js`,
               location: 'body'
             }
           }] : [],
@@ -54,7 +55,7 @@ module.exports = {
               data: (() => {
                 let data
 
-                requireContext(path.resolve(__dirname, '../src/data/shopify'), false, /\.yml$/)
+                requireContext(path.resolve(__dirname, '../src/data/shopify'), true, /\.yml$/)
                   .keys()
                   .forEach(file => {
                     const contents = fs.readFileSync(path.resolve(__dirname, `../src/data/shopify/${file}`))
@@ -88,12 +89,22 @@ module.exports = {
               },
               data: (context) => {
                 let data = {
-                  server: `http://localhost:${package.config.devServerPort}`,
+                  server: server, // absolute path to localhost address
                   env: process.env.NODE_ENV,
                   development: process.env.NODE_ENV === 'development',
-                  production: process.env.NODE_ENV === 'production'
+                  production: process.env.NODE_ENV === 'production',
+                  templates: null
                 }
 
+                // force webpack to watch folder
+                context.addContextDependency(path.resolve(__dirname, '../src/templates'))
+
+                // get all templates
+                data.templates = requireContext(path.resolve(__dirname, '../src/templates'), true, /\.twig$/)
+                  .keys()
+                  .map(template => template.replace('.twig', ''))
+
+                // get all yml data
                 requireContext(path.resolve(__dirname, '../src/data'), false, /\.yml$/)
                   .keys()
                   .forEach(file => {
@@ -113,15 +124,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new ProgressBarPlugin(),
-    new CleanWebpackPlugin(),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, '../src/img'),
-          to: path.resolve(__dirname, '../dist/img')
-        }
-      ]
-    })
+    new ProgressPlugin(),
+    new CleanWebpackPlugin()
   ]
 }
