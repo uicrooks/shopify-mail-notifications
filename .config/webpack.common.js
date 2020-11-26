@@ -55,7 +55,7 @@ module.exports = {
               data: (() => {
                 let data
 
-                requireContext(path.resolve(__dirname, '../src/data/shopify'), true, /\.yml$/)
+                requireContext(path.resolve(__dirname, '../src/data/shopify'), true, /\.ya?ml$/)
                   .keys()
                   .forEach(file => {
                     const contents = fs.readFileSync(path.resolve(__dirname, `../src/data/shopify/${file}`))
@@ -105,7 +105,7 @@ module.exports = {
                   .map(template => template.replace('.twig', ''))
 
                 // get all yml data
-                requireContext(path.resolve(__dirname, '../src/data'), false, /\.yml$/)
+                requireContext(path.resolve(__dirname, '../src/data'), false, /\.ya?ml$/)
                   .keys()
                   .forEach(file => {
                     // force webpack to watch files
