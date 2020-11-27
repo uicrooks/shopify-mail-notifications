@@ -14,6 +14,17 @@
 Blazing fast templating environment for Shopify mail notifications with Liquid, ✉ MJML + 🌿 Twig. Create responsive emails quickly with less code.
 <!-- title / description (end) -->
 
+<!-- toc (start) -->
+## Table of contents
+- [Features](#features)
+- [System requirements](#system-requirements)
+- [Getting started](#getting-started)
+- [Production](#production)
+- [Directories](#directories)
+- [Documentation](#documentation)
+- [Limitations](#limitations)
+<!-- toc (end) -->
+
 <!-- features (start) -->
 ## Features
 - MJML
@@ -87,13 +98,16 @@ $ yarn build
 | src/assets | Contains images (used only during development). |
 | src/components | Contains reusable components. |
 | src/data | Contains `.yml` files. The contents are accessible in all `.twig` files. |
-| src/data/shopify | Contains `data.yml` file with Shopify dummy data (used during development to preview liquid templates). |
+| src/data/shopify | Contains `data.yml` file with Shopify dummy data (used during development to populate liquid templates). |
 | src/layouts | Contains layouts. |
 | src/templates | Contains mail templates. The `index.twig` template is reserved for navigation. |
 <!-- directories (end) -->
 
 <!-- documentation (start) -->
 ## Documentation
+Development flow: `Twig` → `MJML` → `Liquid` → `.html files` → `Webpack-dev-server`
+
+Production flow: `Twig` → `MJML` → `.liquid files`
 
 ### Additional Docs
 - [MJML docs](https://documentation.mjml.io/)
