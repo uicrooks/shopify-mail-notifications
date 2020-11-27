@@ -127,7 +127,7 @@ It's important to understand in which order webpack transforms the code. First, 
 
 <!-- limitations (start) -->
 ## Limitations
-- If you change data in files inside `src/data/shopify/` you have to restart webpack.
+- If you change data in files inside `src/data/shopify/`, you have to restart webpack.
 - It's not possible to set `shop.email_accent_color` to change it later in Shopify.
 - `POS Exchange Receipt` template doesn't work.
 <!-- limitations (end) -->
