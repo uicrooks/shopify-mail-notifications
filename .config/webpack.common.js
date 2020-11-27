@@ -35,7 +35,7 @@ module.exports = {
               name (resourcePath) {
                 const customPath = resourcePath
                   .replace(/^.*templates/, '')
-                  .replace(/\.twig/, '.html')
+                  .replace(/\.twig/, process.env.NODE_ENV === 'development' ? '.html' : '.liquid')
 
                 return customPath
               }
