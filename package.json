@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack serve --config .config/webpack.dev.js",
-    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config .config/webpack.prod.js && rm dist/main.js"
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config .config/webpack.prod.js && rm dist/main.js && rm dist/index.html"
   },
   "devDependencies": {
     "boxen": "^4.2.0",

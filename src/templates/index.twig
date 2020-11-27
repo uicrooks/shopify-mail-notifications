@@ -1,0 +1,30 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # navigation template
+ #}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{# content - start #}
+{% block content %}
+  <mj-section>
+    <mj-column>
+      <mj-text>
+        <div style="background: #f0f0f0; padding: 25px 25px 15px;">
+          {% for template in templates %}
+            {% if template != 'index' %}
+              <div style="margin-bottom: 5px;">
+                <a href="{{ template }}" style="display: inline-block; font-size: 16px; padding: 2px">
+                  {{ template }}
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+{% endblock %}
+{# content - end #}
