@@ -8,10 +8,13 @@
  # you can use mj-all to set default attributes for every components inside your document
  #}
 <mj-all
-  font-family="Open Sans"
+  font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"
   padding="0"
 />
-<mj-body width="650px" />
+<mj-body
+  css-class="container"
+  width="{{ style['max-width'] }}"
+/>
 
 {# layout #}
 <mj-wrapper />
@@ -21,7 +24,7 @@
 <mj-group />
 <mj-divider
   border-width="1px"
-  border-color="#3c6955"
+  border-color="{{ style.color.grey }}"
 />
 <mj-spacer />
 
@@ -36,12 +39,8 @@
 {# components #}
 <mj-hero />
 <mj-navbar />
-<mj-navbar-link
-  padding="10px"
-/>
-<mj-social
-  text-padding="5px"
-/>
+<mj-navbar-link />
+<mj-social />
 <mj-carousel />
 <mj-accordion />
 
@@ -49,5 +48,4 @@
  # custom mj-classes
  # reference them like this: <mj-text mj-class="my-class"></mj-text>
  #}
-<mj-class name="bg-primary" background-color="{{ style.color.primary }}" />
-<mj-class name="bg-secondary" background-color="{{ style.color.secondary }}" />
+{# <mj-class name="bg-primary" background-color="{{ style.color.primary }}" /> #}

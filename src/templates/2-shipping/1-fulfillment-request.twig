@@ -1,0 +1,147 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Order fulfillment request for {{ shop.name }}
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Order fulfillment request for {{ shop.name }}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# header - start #}
+{% block header %}{% endblock %}
+{# header - end #}
+
+{# content - start #}
+{% block content %}
+  <mj-section padding="20px 0">
+    <mj-column>
+      <mj-text
+        font-size="16px"
+        line-height="1.7"
+      >
+        <p style="padding-bottom: 25px;">
+          {% verbatim %}{{ service_name }}{% endverbatim %},<br>
+
+          Please fulfill order {% verbatim %}{{ name }}{% endverbatim %}.<br>
+          Total number of items: {% verbatim %}{{ fulfillment.item_count }}{% endverbatim %}<br>
+          Unique items: {% verbatim %}{{ fulfillment.fulfillment_line_items.size }}{% endverbatim %}
+        </p>
+
+        {% if development %}
+          {% verbatim %}
+            {% for line in line_items %}
+              <p style="padding-bottom: 25px;">
+                <strong>Items to fulfill:</strong><br>
+                Variant Title: {{ line.title }}<br>
+                SKU: {{ line.sku }}<br>
+                Quantity: {{ line.quantity }}<br>
+                Grams: {{ line.grams }}<br>
+                Vendor: {{ line.vendor }}
+              </p>
+            {% endfor %}
+          {% endverbatim %}
+        {% else %}
+          {% verbatim %}
+            {% for line in fulfillment.fulfillment_line_items %}
+              <p style="padding-bottom: 25px;">
+                <strong>Items to fulfill:</strong><br>
+                Variant Title: {{ line.line_item.title }}<br>
+                SKU: {{ line.line_item.sku }}<br>
+                Quantity: {{ line.quantity }}<br>
+                Grams: {{ line.line_item.grams }}<br>
+                Vendor: {{ line.line_item.vendor }}
+              </p>
+            {% endfor %}
+          {% endverbatim %}
+        {% endif %}
+
+        {% verbatim %}
+          {% if shipping_address %}
+            <p style="padding-bottom: 25px;">
+              <strong>Shipping Address:</strong><br>
+
+              {{ shipping_address.name }}<br>
+
+              {% if shipping_address.company %}
+                {{ shipping_address.company }}<br>
+              {% endif %}
+
+              {{ shipping_address.address1 }}<br>
+              {% if shipping_address.address2 != blank %}
+                {{ shipping_address.address2 }}<br>
+              {% endif %}
+              {{ shipping_address.city }}, {{ shipping_address.province }}<br>
+              {{ shipping_address.zip }}<br>
+              {{ shipping_address.country }}<br>
+
+              {% if shipping_address.phone %}
+                Phone: {{ shipping_address.phone }}
+              {% endif %}
+            </p>
+          {% endif %}
+        {% endverbatim %}
+
+        <p style="padding-bottom: 25px;">
+          <strong>Shipping Method:</strong><br>
+
+          {% verbatim %}
+            {% if shipping_methods %}
+              {{ shipping_methods.first.title }}
+            {% else %}
+              None
+            {% endif %}
+          {% endverbatim %}
+        </p>
+
+        <p style="padding-bottom: 25px;">
+          <strong>Tracking Number:</strong><br>
+
+          {% verbatim %}
+            {% if fulfillment.tracking_number %}
+              {{ fulfillment.tracking_number }}
+            {% else %}
+              None
+            {% endif %}
+          {% endverbatim %}
+        </p>
+
+        <p style="padding-bottom: 25px;">
+          <strong>Customer Email:</strong><br>
+
+          {% verbatim %}{{ customer.email }}{% endverbatim %}
+        </p>
+
+        <br>
+
+        <p>
+          Thank you, <br>
+          {% verbatim %}{{ shop.name }}{% endverbatim %}
+        </p>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+{% endblock %}
+{# content - end #}
+
+{# footer - start #}
+{% block footer %}{% endblock %}
+{# footer - end #}

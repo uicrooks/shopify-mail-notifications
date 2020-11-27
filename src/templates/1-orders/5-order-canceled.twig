@@ -1,0 +1,93 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Order {{ name }} has been canceled
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Your order has been canceled{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}
+      {% if financial_status == 'voided' %}
+        {% case cancel_reason %}
+          {% when 'customer' %}
+            Order {{ name }} was canceled at your request and your payment has been voided.
+          {% when 'inventory' %}
+            Order {{ name }} was canceled because we did not have enough stock to fulfill your order and your payment has been voided.
+          {% when 'fraud' %}
+            Order {{ name }} was canceled because we suspect it is fraudulent and your payment has been voided.
+          {% when 'other' %}
+            Order {{ name }} was canceled because of unforseen circumstances and your payment has been voided.
+        {% endcase %}
+      {% elsif financial_status == 'refunded' %}
+        {% case cancel_reason %}
+          {% when 'customer' %}
+            Order {{ name }} was canceled at your request and your payment has been refunded.
+          {% when 'inventory' %}
+            Order {{ name }} was canceled because we did not have enough stock to fulfill your order and your payment has been refunded.
+          {% when 'fraud' %}
+            Order {{ name }} was canceled because we suspect it is fraudulent and your payment has been refunded.
+          {% when 'other' %}
+            Order {{ name }} was canceled because of unforseen circumstances and your payment has been refunded.
+        {% endcase %}
+      {% endif %}
+    {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% include '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: development ? 'Order #9999 was canceled at your request and your payment has been refunded.' : '{{ preview }}'
+  } %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Refunded Items',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in subtotal_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  {% embed '@components::local/totals.twig' %}
+    {% block outstanding %}{% endblock %}
+  {% endembed %}
+
+  <mj-section>
+    <mj-column>
+      <mj-spacer height="50px" />
+    </mj-column>
+  </mj-section>
+{% endblock %}
+{# content - end #}

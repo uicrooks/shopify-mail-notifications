@@ -1,0 +1,58 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # [{{shop.name}}] Payment couldn’t be processed
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Your payment couldn’t be processed{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}You added items to your shopping cart but the payment couldn’t be processed. You haven’t been charged.{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{{ preview }}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+
+  <mj-section padding-bottom="20px">
+    <mj-column>
+      <mj-text
+        font-size="16px"
+        line-height="1.7"
+        font-weight="700"
+        color="{{ style.color['grey-dark'] }}"
+      >
+        You can still return to your cart to complete your purchase.
+      </mj-text>
+    </mj-column>
+  </mj-section>
+
+  {% include '@components::local/actions.twig' with {
+    primary: {
+      url: '{{ url }}',
+      text: 'Return to cart'
+    }
+  } %}
+{% endblock %}
+{# content - end #}

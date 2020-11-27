@@ -1,0 +1,118 @@
+{#
+ # TODO: templates doen't work
+ #}
+
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Exchange receipt from {{ shop.name }}
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% include '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: "{% if exchange_type == 'balance_owed_to_customer' %} Total amount refunded: {{ exchange_balance | money }} {% endif %}"
+  } %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Original order #{{ parent_order_number }} summary on {{ parent_order_processed_at }}',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in parent_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  {% verbatim %}
+    {% assign discounts = parent_discounts %}
+    {% assign discounts_savings = parent_discounts_savings %}
+    {% assign subtotal_price = parent_subtotal_price %}
+    {% assign shipping_price = parent_shipping_price %}
+    {% assign tax_price = parent_tax_price %}
+    {% assign total_price = parent_total_price %}
+
+    {% assign transactions = parent_transactions %}
+  {% endverbatim %}
+
+  {% include '@components::local/totals.twig' %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Exchange order #{{ child_order_number }} summary on {{ child_order_processed_at }}',
+    padding: '100px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in child_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  {% verbatim %}
+    {% assign discounts = child_discounts %}
+    {% assign discounts_savings = child_discounts_savings %}
+    {% assign subtotal_price = child_subtotal_price %}
+    {% assign shipping_price = child_shipping_price %}
+    {% assign tax_price = child_tax_price %}
+    {% assign total_price = child_total_price %}
+
+    {% assign transactions = child_transactions %}
+  {% endverbatim %}
+
+  {% include '@components::local/totals.twig' %}
+
+  <mj-section>
+    <mj-column>
+      <mj-spacer height="50px" />
+    </mj-column>
+  </mj-section>
+{% endblock %}
+{# content - end #}

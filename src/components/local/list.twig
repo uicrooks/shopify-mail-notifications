@@ -1,0 +1,22 @@
+{% block list_outer %}
+  <mj-section padding="{{ padding | default('0 0 20px') }}">
+    <mj-column>
+      <mj-text
+        font-size="16px"
+        padding-bottom="5px"
+        color="{{ style.color['grey-dark'] }}"
+      >
+        {% block list %}
+          <ol>
+            {% for text in list | default([
+              'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
+              'Quidem veniam at voluptate consectetur laborum provident harum qui.'
+            ]) %}
+              <li style="padding-bottom: 10px;">{{ text }}</li>
+            {% endfor %}
+          </ol>
+        {% endblock %}
+      </mj-text>
+    </mj-column>
+  </mj-section>
+{% endblock %}

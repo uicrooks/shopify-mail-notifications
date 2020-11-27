@@ -1,0 +1,121 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Your order is ready for pickup ({{ name }})
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Your order is ready for pickup{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}Bring your confirmation email when you come to collect your {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% include '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{% if pickup_instructions != blank %} {{ pickup_instructions }} {% else %} {{ preview }} {% endif %}'
+  } %}
+
+  <mj-section padding-bottom="20px">
+    <mj-column>
+      <mj-text
+        font-size="16px"
+        line-height="1.7"
+        color="{{ style.color['grey-dark'] }}"
+      >
+        {% verbatim %}
+        <strong>Pickup location</strong><br>
+
+        {{ location.name }}<br>
+        {{ location.address1 }}<br>
+        {% if location.address2 != blank %}
+          {{ location.address2 }}<br>
+        {% endif %}
+        {{ location.city | capitalize }} {{ location.province | capitalize }} {{ location.zip | upcase }}<br>
+        <a href="http://www.google.com/maps/search/?api=1&query={{ location.name }} - {{ [location.address1, location.address2].compact.join(', ') }}, {{ location.city }}, {{ location.province }}, {{ location.zip }}" target="_blank">
+          Open map <span>→</span>
+        </a>
+        {% endverbatim %}
+      </mj-text>
+    </mj-column>
+  </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% if order_status_url %}
+    </mj-raw>
+  {% endverbatim %}
+
+    {% include '@components::local/actions.twig' with {
+      primary: {
+        url: '{{ order_status_url }}',
+        text: 'View your order'
+      }
+    } %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% else %}
+    </mj-raw>
+  {% endverbatim %}
+
+    {% embed '@components::local/actions.twig' with {
+      primary: {
+        url: '{{ shop.url }}',
+        text: 'Visit our store'
+      }
+    } %}
+      {% block secondary_outer %}{% endblock %}
+    {% endembed%}
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Order summery',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in subtotal_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  {% embed '@components::local/totals.twig' %}
+    {% block outstanding %}{% endblock%}
+  {% endembed %}
+{% endblock %}
+{# content - end #}

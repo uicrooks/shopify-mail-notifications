@@ -1,0 +1,205 @@
+# messages which can be activated by the user
+# uncomment to test
+# ---
+# custom_message: Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci veritatis illum odio vitae autem dolorem placeat voluptas obcaecati, inventore natus.
+# delivery_instructions: Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci veritatis illum odio vitae autem dolorem placeat voluptas obcaecati, inventore natus.
+
+# different based on the template they are used in
+url: /
+checkout_payment_collection_url: /
+authentication_link: /
+email_confirmation_url: /
+amount: 50000
+
+# global
+unsubscribe_url: /
+service_name: My Custom Fulfillment Service Inc. # fulfillment service provider
+date: 2020-11-13 18:50:18 +0100
+
+# order
+id: 1234
+name: '#9999'
+gateway: Visa
+item_count: 2
+fulfillment_status: fulfilled # unfulfilled / partial / fulfilled / pending
+requires_shipping: true
+shipping_methods:
+  -
+    title: Generic Shipping
+shipping_method:
+  title: Generic Shipping
+order_status_url: /
+fulfillment_url: /
+has_high_risks?: true
+fulfillment_aborted: true
+discount_applications:
+  -
+    title: loyalty
+    total_allocated_amount: 1000
+    target_selection: all
+subtotal_price: 40000
+delivery_method: undefined
+shipping_price: 499
+current_total_duties: 1000
+tax_price: 1500
+total_tip: 200
+total_price: 50000
+net_payment: 15000
+total_outstanding: 35000
+total_discounts: 2000
+transactions:
+  -
+    # credit card
+    status: success
+    kind: authorization
+    gateway_display_name: Visa
+    amount: 10000
+    payment_details:
+      credit_card_company: Visa
+      credit_card_number: '•••• •••• •••• 1234'
+      credit_card_last_four_digits: 1234
+  -
+    # gift card
+    status: success
+    kind: sale
+    gateway_display_name: 'Gift card'
+    amount: 10000
+    payment_details:
+      gift_card:
+        balance: 2000
+        last_four_characters: ABCD
+  -
+    # refund
+    kind: refund
+    gateway: Bogus
+    amount: 10000
+# additional draft order variables
+invoice_url: /
+reserve_inventory_until: 2020-11-13 18:50:18 +0100
+
+# customer
+customer:
+  name: John Smith
+  first_name: John
+  email: john@test.com
+  account_activation_url: /
+  reset_password_url: /
+  subscribe_url: /
+
+# billing address
+billing_address:
+  name: Bob Biller
+  first_name: Bob
+  last_name: Biller
+  company: My Company
+  address1: Billtown
+  address2: null
+  city: Billtown
+  province: Kentucky
+  province_code: KY
+  zip: K2P0B0
+  country: United States
+  phone: 555-555-BILL
+
+# shipping address
+shipping_address:
+  name: Steve Shipper
+  first_name: Steve
+  last_name: Shipper
+  company: Shipping Company
+  address1: 123 Shipping Street
+  address2: null
+  city: Shippington
+  province: Kentucky
+  province_code: KY
+  zip: 40003
+  country: United States
+  phone: 555-555-SHIP
+
+# shop
+shop:
+  email_logo_url: https://cdn.shopify.com/shopifycloud/shopify/assets/mailer/merchant/shopify_logo-ab8bfbd03d685aa04a8db0c119c5cbee279b5f9bd32a26f9ad3df0a96d9b7f83.png
+  email_logo_width: 150
+  email_accent_color: '#1A90C6'
+  name: My Shopify Store
+  email: contact@shopify.com
+  url: /
+  permanent_domain: /
+
+# location
+location:
+  name: Example Shop
+  address1: 34 Example Street
+  address2: Next to example
+  city: Ottawa
+  province: Ontario
+  zip: K1N5T5
+
+# fulfillment
+fulfillment:
+  tracking_numbers:
+    - 1234
+  tracking_number: 1234
+  tracking_company: UPS
+  tracking_url: /
+  estimated_delivery_at: 2020-11-13 18:50:18 +0100
+  item_count: 4
+  fulfillment_line_items: # use 'line_items' in development and 'fulfillment.fulfillment_line_items' in production
+    - 1
+    - 2
+
+# gift card
+gift_card:
+  url: /
+  pass_url: / # apple wallet url
+  balance: 10000
+  expires_on: 01.01.2040
+
+# returns
+return_label:
+  public_file_url: /
+
+return:
+  line_items: true # use 'line_items' in development and 'return.line_items' in production
+  deliveries:
+    -
+      type: manual # shopify_label / manual
+      tracking_url: /
+      carrier_name: UPS
+      return_label:
+        public_file_url: /
+
+# refunds
+refund_line_items: true
+
+# line items
+line_items:
+  # -
+  #   gift_card # used to toggle gift-card notice
+  -
+    image: product.png
+    title: Title
+    quantity: 1
+    grams: 100
+    vendor: Vendor
+    product:
+      title: Product title
+    variant:
+      title: Default Title # use 'Default Title' to hide
+    sku: SKU1234
+    selling_plan_allocation:
+      selling_plan:
+        name: Subscription # can be anything
+    refunded_quantity: 0
+    discount_allocations:
+      -
+        amount: 500
+        discount_application:
+          target_selection: product # use 'all' to hide
+          title: Loyalty
+    original_line_price: 10000
+    final_line_price: 5000
+    unit_price: 1000
+    unit_price_measurement:
+      reference_value: 1
+      reference_unit: kg

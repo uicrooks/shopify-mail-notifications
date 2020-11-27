@@ -1,0 +1,28 @@
+<mj-raw>
+  {% verbatim %}
+    {% assign gift_card_line_item = line_items | where: 'gift_card' %}
+
+    {% if gift_card_line_item.first %}
+  {% endverbatim %}
+</mj-raw>
+
+  <mj-section padding="{{ padding | default('0 0 20px') }}">
+    <mj-column>
+      <mj-text
+        font-size="16px"
+        color="{{ style.color['grey-dark'] }}"
+      >
+        <strong>Gift card</strong>
+
+        <br>
+
+        You’ll receive separate emails for any gift cards.
+      </mj-text>
+    </mj-column>
+  </mj-section>
+
+<mj-raw>
+  {% verbatim %}
+    {% endif %}
+  {% endverbatim %}
+</mj-raw>

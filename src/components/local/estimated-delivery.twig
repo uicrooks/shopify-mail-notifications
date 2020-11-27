@@ -1,0 +1,23 @@
+{% verbatim %}
+  <mj-raw>
+    {% if fulfillment.estimated_delivery_at %}
+  </mj-raw>
+{% endverbatim %}
+
+  <mj-section padding="{{ padding | default('0 0 20px') }}">
+    <mj-column>
+      <mj-text
+        font-size="16px"
+        line-height="1.7"
+        color="{{ style.color['grey-dark'] }}"
+      >
+        Estimated delivery date: <strong>{% verbatim %}{{ fulfillment.estimated_delivery_at | date: '%B %-d, %Y' }}{% endverbatim %}</strong>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+
+{% verbatim %}
+  <mj-raw>
+    {% endif %}
+  </mj-raw>
+{% endverbatim %}

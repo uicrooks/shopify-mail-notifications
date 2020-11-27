@@ -1,0 +1,209 @@
+{% block headline_outer %}
+  {% include '@components::local/headline.twig' with {
+    headline: headline | default('Customer information')
+  } %}
+{% endblock %}
+
+{% block shipping_address_outer %}
+  {% verbatim %}
+    <mj-raw>
+      {% if requires_shipping and shipping_address %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section padding="{{ padding | default('0 0 30px') }}">
+      <mj-column>
+          <mj-text
+            font-size="16px"
+            font-weight="500"
+            color="{{ style.color['grey-dark'] }}"
+            padding-bottom="5px"
+          >
+            {% block shipping_address_headline %}
+              {{ shipping_address_headline | default('Shipping address') }}
+            {% endblock %}
+          </mj-text>
+
+          <mj-text
+            font-size="16px"
+            line-height="1.7"
+            color="{{ style.color['grey-dark'] }}"
+          >
+            {% block shipping_address %}
+              {% verbatim %}
+                {{ shipping_address | format_address }}
+              {% endverbatim %}
+            {% endblock %}
+          </mj-text>
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+{% endblock %}
+
+{% block billing_address_outer %}
+  {% verbatim %}
+    <mj-raw>
+      {% if billing_address %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section padding-bottom="30px">
+      <mj-column>
+          <mj-text
+            font-size="16px"
+            font-weight="500"
+            color="{{ style.color['grey-dark'] }}"
+            padding-bottom="5px"
+          >
+            {% block billing_address_headline %}
+              {{ billing_address_headline | default('Billing address') }}
+            {% endblock %}
+          </mj-text>
+
+          <mj-text
+            font-size="16px"
+            line-height="1.7"
+            color="{{ style.color['grey-dark'] }}"
+          >
+            {% block billing_address %}
+              {% verbatim %}
+                {{ billing_address | format_address }}
+              {% endverbatim %}
+            {% endblock %}
+          </mj-text>
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+{% endblock %}
+
+{% block shipping_method_outer %}
+  {% verbatim %}
+    <mj-raw>
+      {% if requires_shipping and shipping_address %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section padding-bottom="30px">
+      <mj-column>
+          <mj-text
+            font-size="16px"
+            font-weight="500"
+            color="{{ style.color['grey-dark'] }}"
+            padding-bottom="5px"
+          >
+            {% block shipping_method_headline %}
+              {{ shipping_method_headline | default('Shipping method') }}
+            {% endblock %}
+          </mj-text>
+
+          <mj-text
+            font-size="16px"
+            line-height="1.7"
+            color="{{ style.color['grey-dark'] }}"
+          >
+            {% block shipping_method %}
+              {% verbatim %}
+                {{ shipping_method.title }}
+              {% endverbatim %}
+            {% endblock %}
+          </mj-text>
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+{% endblock %}
+
+{% block payment_method_outer %}
+  {% verbatim %}
+    <mj-raw>
+      {% assign transaction_count = transactions | size %}
+      {% if transaction_count > 0 %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section padding-bottom="30px">
+      <mj-column>
+        <mj-text
+          font-size="16px"
+          font-weight="500"
+          color="{{ style.color['grey-dark'] }}"
+          padding-bottom="5px"
+        >
+          {% block payment_method_headline %}
+            {{ payment_method_headline | default('Payment method') }}
+          {% endblock %}
+        </mj-text>
+
+        {% verbatim %}
+          <mj-raw>
+            {% for transaction in transactions %}
+              {% if transaction.status == 'success' or transaction.status == 'pending' %}
+                {% if transaction.kind == 'authorization' or transaction.kind == 'sale' %}
+          </mj-raw>
+        {% endverbatim %}
+
+          <mj-text
+            font-size="16px"
+            line-height="1.7"
+            color="{{ style.color['grey-dark'] }}"
+            padding-bottom="5px"
+          >
+            {% block payment_method %}
+              {% verbatim %}
+                {% if transaction.payment_details.credit_card_company %}
+                  {% capture credit_card_url %}notifications/{{ transaction.payment_details.credit_card_company | downcase | replace: ' ', '_' }}.png{% endcapture %}
+
+                  <img
+                    src="{{ credit_card_url | shopify_asset_url }}"
+                    width="38"
+                    height="24"
+                    style="vertical-align: text-top; padding-right: 5px;"
+                  >
+
+                  ending with {{ transaction.payment_details.credit_card_last_four_digits }} — <strong>{{ transaction.amount | money }}</strong>
+                {% elsif transaction.gateway_display_name == 'Gift card' %}
+                  <img
+                    src="{{ 'notifications/gift-card.png' | shopify_asset_url }}"
+                    width="38"
+                    height="24"
+                    style="vertical-align: text-top; padding-right: 5px;"
+                  >
+
+                  ending with {{ transaction.payment_details.gift_card.last_four_characters | upcase }} — <strong>{{ transaction.amount | money }}</strong> <span style="font-size: 14px;">(Gift card balance: {{ transaction.payment_details.gift_card.balance | money }})</span>
+                {% else %}
+                  {{ transaction.gateway_display_name }} — <strong>{{ transaction.amount | money }}</strong>
+                {% endif %}
+              {% endverbatim %}
+            {% endblock %}
+          </mj-text>
+
+        {% verbatim %}
+          <mj-raw>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </mj-raw>
+        {% endverbatim %}
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+{% endblock %}

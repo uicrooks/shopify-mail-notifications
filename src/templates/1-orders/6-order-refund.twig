@@ -1,0 +1,77 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Refund notification
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}
+      {% if refund_line_items.size == item_count %}
+        Your order has been refunded
+      {% elsif refund_line_items.size == 0 %}
+        You have received a refund
+      {% else %}
+        Some items in your order have been refunded
+      {% endif %}
+    {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}Total amount refunded: {{ amount | money_with_currency }}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% include '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{{ preview }}'
+  } %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Order summary',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in subtotal_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  {% embed '@components::local/totals.twig' %}
+    {% block outstanding %}{% endblock %}
+  {% endembed %}
+
+  <mj-section>
+    <mj-column>
+      <mj-spacer height="50px" />
+    </mj-column>
+  </mj-section>
+{% endblock %}
+{# content - end #}

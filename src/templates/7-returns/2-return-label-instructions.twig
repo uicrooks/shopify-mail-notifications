@@ -1,0 +1,57 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Return label for order {{ name }}
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Return label for order {{ name }}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}Follow the link to edit your payment details for subscription orders at {{ shop.name }}. If you didn’t request a change to your payment method, you can safely delete this email.{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: 'Your return label is ready'
+  } %}
+    {% block text_outer %}{% endblock %}
+  {% endembed %}
+
+  {% include '@components::local/actions.twig' with {
+    primary: {
+      url: '{{ return_label.public_file_url }}',
+      text: 'Print return label'
+    },
+    padding: '0 0 20px'
+  } %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Instructions'
+  } %}
+
+  {% include '@components::local/list.twig' with {
+    list: [
+      'Pack the items you’re returning.',
+      'Print your return label and attach it to the package. Cover any existing shipping labels.',
+      'Give the package to the carrier identified on the label.'
+    ]
+  } %}
+{% endblock %}
+{# content - end #}

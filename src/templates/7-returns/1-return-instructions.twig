@@ -1,0 +1,163 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Complete your return for Order {{ name }}
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Complete your return for Order {{ name }}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}Complete your return{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% verbatim %}
+    <mj-raw>
+      {% for return_delivery in return.deliveries %}
+    </mj-raw>
+  {% endverbatim %}
+
+    {% verbatim %}
+      <mj-raw>
+        {% if return_delivery.type == 'shopify_label' %}
+      </mj-raw>
+    {% endverbatim %}
+
+      {% include '@components::local/intro-text.twig' with {
+        headline: 'Your return shipping label is ready',
+        text: 'Print your return shipping label and attach it to the package containing your return items'
+      } %}
+
+      {% include '@components::local/actions.twig' with {
+        primary: {
+          url: '{{ return_delivery.return_label.public_file_url }}',
+          text: 'Print return label'
+        },
+        secondary: {
+          url: '{{ order_status_url }}',
+          text: 'View your order'
+        }
+      } %}
+
+    {% verbatim %}
+      <mj-raw>
+        {% elsif return_delivery.type == 'manual' %}
+      </mj-raw>
+    {% endverbatim %}
+
+      {% include '@components::local/intro-text.twig' with {
+        headline: 'Complete your return',
+        text: '<strong>We’ve sent you a return shipping label, or you will receive one soon.</strong> Once you receive your return shipping label, get your returned items and follow the instructions to complete your return.'
+      } %}
+
+    {% verbatim %}
+      <mj-raw>
+        {% endif %}
+      </mj-raw>
+    {% endverbatim %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% endfor %}
+    </mj-raw>
+  {% endverbatim %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Returned items',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in return.line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  <mj-section>
+    <mj-column>
+      <mj-spacer height="50px" />
+    </mj-column>
+  </mj-section>
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Instructions'
+  } %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% for return_delivery in return.deliveries %}
+    </mj-raw>
+  {% endverbatim %}
+
+    {% verbatim %}
+      <mj-raw>
+        {% if return_delivery.type == 'shopify_label' %}
+      </mj-raw>
+    {% endverbatim %}
+
+      {% include '@components::local/list.twig' with {
+        list: [
+          'Pack the items you’re returning.',
+          'Print your return shipping label and attach it to the package. Cover or remove any old shipping labels.',
+          '{% if return_delivery.carrier_name %} Give the package to {{ return_delivery.carrier_name }}. {% else %} Give the package to the carrier identified on the label. {% endif %}'
+        ]
+      } %}
+
+    {% verbatim %}
+      <mj-raw>
+        {% elsif return_delivery.type == 'manual' %}
+      </mj-raw>
+    {% endverbatim %}
+
+      {% include '@components::local/list.twig' with {
+        list: [
+          'Pack the items you’re returning.',
+          'Print your return shipping label. If you haven’t received it yet, we’ll send it to you soon.',
+          'Attach the label to the package. Cover or remove any old shipping labels.',
+          '{% if return_delivery.carrier_name %} Give the package to {{ return_delivery.carrier_name }}. {% else %} Give the package to the carrier identified on the label. {% endif %}',
+          'Track your return using <a target="_blank" href="{{ return_delivery.tracking_url }}">your tracking number</a> to make sure we get it.'
+        ]
+      } %}
+
+    {% verbatim %}
+      <mj-raw>
+        {% endif %}
+      </mj-raw>
+    {% endverbatim %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% endfor %}
+    </mj-raw>
+  {% endverbatim %}
+{% endblock %}
+{# content - end #}

@@ -1,24 +1,50 @@
-<mj-section mj-class="bg-primary" padding="20px">
-  <mj-column>
-    <mj-text
-      font-size="20px"
-      color="#fff"
-    >
-      {{ data.title }}
-    </mj-text>
-  </mj-column>
-</mj-section>
+{% block header_outer %}
+  <mj-section padding-bottom="40px">
+    <mj-column>
+      {% block header %}
+        {% verbatim %}
+          <mj-raw>
+            {% if shop.email_logo_url %}
+          </mj-raw>
+        {% endverbatim %}
 
-<mj-section mj-class="bg-secondary">
-  <mj-column padding="10px 20px">
-    <mj-navbar
-      base-url="/"
-      hamburger="hamburger"
-      ico-color="#000"
-    >
-      {% for element in data.nav %}
-        <mj-navbar-link href="{{ element.url }}">{{ element.name }}</mj-navbar-link>
-      {% endfor %}
-    </mj-navbar>
-  </mj-column>
-</mj-section>
+          <mj-text font-size="0">
+            <a
+              href="{% verbatim %}{{ shop.url }}{% endverbatim %}"
+              style="display: inline-block;"
+            >
+              <img
+                src="{{ development ? server ~ '/assets/logo.png' : '{{ shop.email_logo_url }}' }}"
+                alt="{% verbatim %}{{ shop.name }}{% endverbatim %}"
+                width="{% verbatim %}{{ shop.email_logo_width }}{% endverbatim %}"
+              >
+            </a>
+          </mj-text>
+
+        {% verbatim %}
+          <mj-raw>
+            {% else %}
+          </mj-raw>
+        {% endverbatim %}
+
+          <mj-text
+            font-size="32px"
+            font-weight="700"
+          >
+            <a
+              href="{% verbatim %}{{ shop.url }}{% endverbatim %}"
+              style="display: inline-block; color: {{ style.color.black }}"
+            >
+              {% verbatim %}{{ shop.name }}{% endverbatim %}
+            </a>
+          </mj-text>
+
+        {% verbatim %}
+          <mj-raw>
+            {% endif %}
+          </mj-raw>
+        {% endverbatim %}
+      {% endblock %}
+    </mj-column>
+  </mj-section>
+{% endblock %}

@@ -1,0 +1,403 @@
+<mj-section padding-bottom="20px">
+  <mj-column
+    border-top="1px solid {{ style.color.grey }}"
+    padding-top="20px"
+  >
+    <mj-table>
+      {# discounts - start #}
+        {% block discounts %}
+          {% verbatim %}
+            {% for discount_application in discount_applications %}
+              {% if discount_application.target_selection == 'all' %}
+          {% endverbatim %}
+
+            {% verbatim %}
+              {% capture discount_title %}
+                {% if discount_application.title %}
+                  {{ discount_application.title | upcase }}
+                {% else %}
+                  Discount
+                {% endif %}
+              {% endcapture %}
+            {% endverbatim %}
+
+            <tr>
+              <td style="padding: 5px 0;">
+                <span style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding-right: 5px;">
+                  Discount
+                </span>
+
+                <span>
+                  <img
+                    src="{% verbatim %}{{ 'notifications/discounttag.png' | shopify_asset_url }}{% endverbatim %}"
+                    width="18"
+                    height="18"
+                    style="vertical-align: bottom; padding-right: 4px;"
+                  />
+
+                  <span style="color: {{ style.color['grey-dark'] }};">
+                    {% verbatim %}
+                      {{ discount_title }}
+                    {% endverbatim %}
+                  </span>
+                </span>
+              </td>
+
+              <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+                <strong>
+                  {% verbatim %}
+                    -{{ discount_application.total_allocated_amount | money }}
+                  {% endverbatim %}
+                </strong>
+              </td>
+            </tr>
+
+          {% verbatim %}
+              {% endif %}
+            {% endfor %}
+          {% endverbatim %}
+        {% endblock %}
+      {# discounts - end #}
+
+      {# subtotal - start #}
+        {% block subtotal %}
+          <tr>
+            <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+              Subtotal
+            </td>
+
+            <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+              {% verbatim %}
+                {{ subtotal_price | money }}
+              {% endverbatim %}
+            </td>
+          </tr>
+        {% endblock %}
+      {# discount - end #}
+
+      {# pickup/shipping - start #}
+        {% block shipping %}
+          <tr>
+            <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+              {% if delivery_method == 'pick-up' %}
+                Pickup
+              {% else %}
+                Shipping
+              {% endif %}
+            </td>
+
+            <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+              {% verbatim %}
+                {{ shipping_price | money }}
+              {% endverbatim %}
+            </td>
+          </tr>
+        {% endblock %}
+      {# pickup/shipping - end #}
+
+      {# duties - start #}
+        {% block duties %}
+          {% verbatim %}
+            {% if current_total_duties %}
+          {% endverbatim %}
+
+            <tr>
+              <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+                Duties
+              </td>
+
+              <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+                {% verbatim %}
+                  {{ current_total_duties | money }}
+                {% endverbatim %}
+              </td>
+            </tr>
+
+          {% verbatim %}
+            {% endif %}
+          {% endverbatim %}
+        {% endblock %}
+      {# duties - end #}
+
+      {# taxes - start #}
+        {% block taxes %}
+          <tr>
+            <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+              Taxes
+            </td>
+
+            <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+              {% verbatim %}
+                {{ tax_price | money }}
+              {% endverbatim %}
+            </td>
+          </tr>
+        {% endblock %}
+      {# taxes - end #}
+
+      {# tip - start #}
+        {% block tip %}
+          {% verbatim %}
+            {% if total_tip and total_tip > 0 %}
+          {% endverbatim %}
+
+            <tr>
+              <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+                Tip
+              </td>
+
+              <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+                {% verbatim %}
+                  {{ total_tip | money }}
+                {% endverbatim %}
+              </td>
+            </tr>
+
+          {% verbatim %}
+            {% endif %}
+          {% endverbatim %}
+        {% endblock %}
+      {# tip - end #}
+    </mj-table>
+  </mj-column>
+</mj-section>
+
+{# outstanding - start #}
+  {% block outstanding %}
+    {% verbatim %}
+      <mj-raw>
+        {% if total_price > total_outstanding %}
+      </mj-raw>
+    {% endverbatim %}
+
+      <mj-section padding-bottom="20px">
+        <mj-column
+          border-top="1px solid {{ style.color.grey }}"
+          padding-top="20px"
+        >
+          <mj-table>
+            <tr>
+              <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+                Updated total
+              </td>
+
+              <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+                {% verbatim %}
+                  {{ total_price | money }}
+                {% endverbatim %}
+              </td>
+            </tr>
+
+            <tr>
+              <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+                Already paid
+              </td>
+
+              <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+                {% verbatim %}
+                  {{ net_payment | money }}
+                {% endverbatim %}
+              </td>
+            </tr>
+          </mj-table>
+        </mj-column>
+      </mj-section>
+
+    {% verbatim %}
+      <mj-raw>
+        {% endif %}
+      </mj-raw>
+    {% endverbatim %}
+
+    <mj-section padding-bottom="20px">
+      <mj-column
+        border-top="2px solid {{ style.color.grey }}"
+        padding-top="20px"
+      >
+        <mj-table>
+          <tr>
+            <td style="font-size: 16px; color: {{ style.color['grey-dark'] }};">
+              Amount to pay
+            </td>
+
+            <td style="text-align: right; font-size: 24px; font-weight: 700;">
+              {% verbatim %}
+                {{ total_outstanding | money_with_currency }}
+              {% endverbatim %}
+            </td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+  {% endblock %}
+{# outstanding - end #}
+
+{# total - start #}
+  {% block total %}
+    <mj-section>
+      <mj-column
+        border-top="2px solid {{ style.color.grey }}"
+        padding-top="20px"
+      >
+        <mj-table>
+          <tr>
+            <td style="font-size: 16px; color: {{ style.color['grey-dark'] }};">
+              Total
+            </td>
+
+            <td style="text-align: right; font-size: 24px; font-weight: 700;">
+              {% verbatim %}
+                {{ total_price | money_with_currency }}
+              {% endverbatim %}
+            </td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+  {% endblock %}
+{# total - end #}
+
+{# discounts - start #}
+  {% block total_discounts %}
+    {% verbatim %}
+      <mj-raw>
+        {% if total_discounts > 0 %}
+      </mj-raw>
+    {% endverbatim %}
+
+      <mj-section padding="10px 0 20px">
+        <mj-column>
+          <mj-text
+            align="right"
+            font-size="16px"
+            color="{{ style.color['grey-dark'] }}"
+          >
+            You saved <span>{% verbatim %}{{ total_discounts | money }}{% endverbatim %}</span>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+    {% verbatim %}
+      <mj-raw>
+        {% endif %}
+      </mj-raw>
+    {% endverbatim %}
+  {% endblock %}
+{# discounts - end #}
+
+{# transactions - start #}
+  {% block transactions %}
+    {% verbatim %}
+      <mj-raw>
+        {% assign transaction_size = 0 %}
+        {% assign transaction_amount = 0 %}
+
+        {% for transaction in transactions %}
+          {% unless transaction.kind == 'capture' or transaction.kind == 'void' %}
+            {% assign transaction_size = transaction_size | plus: 1 %}
+            {% assign transaction_amount = transaction_amount | plus: transaction.amount %}
+          {% endunless %}
+        {% endfor %}
+
+        <!-- htmlmin:ignore -->
+          {% if transaction_size > 1 or transaction_amount < total_price %}
+        <!-- htmlmin:ignore -->
+      </mj-raw>
+    {% endverbatim %}
+
+      <mj-section>
+        <mj-column
+          border-top="1px solid {{ style.color.grey }}"
+          padding-top="20px"
+        >
+          <mj-table>
+            {% verbatim %}
+              {% for transaction in transactions %}
+            {% endverbatim %}
+
+              {# transaction - start #}
+                {% verbatim %}
+                  {% if transaction.status == 'success' and transaction.kind == 'authorization' or transaction.kind == 'sale' %}
+                {% endverbatim %}
+
+                  {% verbatim %}
+                    {% if transaction.payment_details.credit_card_company %}
+                      {% capture transaction_name %}{{ transaction.payment_details.credit_card_company }} <span style="font-size: 14px;">(ending in {{ transaction.payment_details.credit_card_last_four_digits }})</span>{% endcapture %}
+                    {% else %}
+                      {% capture transaction_name %}{{ transaction.gateway_display_name }}{% endcapture %}
+                    {% endif %}
+                  {% endverbatim %}
+
+                  <tr>
+                    <td style="font-size: 16px; color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+                      {% verbatim %}
+                        {{ transaction_name }}
+                      {% endverbatim %}
+                    </td>
+
+                    <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+                      {% verbatim %}
+                        {{ transaction.amount | money }}
+                      {% endverbatim %}
+                    </td>
+                  </tr>
+
+                {% verbatim %}
+                  {% endif %}
+                {% endverbatim %}
+              {# transaction - end #}
+
+              {# refund - start #}
+                {% verbatim %}
+                  {% if transaction.kind == 'refund' %}
+                {% endverbatim %}
+
+                  {% verbatim %}
+                    {% if transaction.payment_details.credit_card_company %}
+                      {% assign refund_method_title = transaction.payment_details.credit_card_company %}
+                    {% else %}
+                      {% assign refund_method_title = transaction.gateway %}
+                    {% endif %}
+                  {% endverbatim %}
+
+                  <tr>
+                    <td style="color: {{ style.color['grey-dark'] }}; padding: 5px 0;">
+                      <span style="font-size: 16px;">
+                        Refund
+                      </span>
+
+                      <br>
+
+                      <span style="font-size: 14px;">
+                        {% verbatim %}
+                          {{ refund_method_title | capitalize }}
+                        {% endverbatim %}
+                      </span>
+                    </td>
+
+                    <td style="text-align: right; font-size: 16px; font-weight: 700; padding: 5px 0;">
+                      {% verbatim %}
+                        - {{ transaction.amount | money }}
+                      {% endverbatim %}
+                    </td>
+                  </tr>
+
+                {% verbatim %}
+                  {% endif %}
+                {% endverbatim %}
+              {# refund - start #}
+
+            {% verbatim %}
+              {% endfor %}
+            {% endverbatim %}
+          </mj-table>
+        </mj-column>
+      </mj-section>
+
+    {% verbatim %}
+      <mj-raw>
+        {% endif %}
+      </mj-raw>
+    {% endverbatim %}
+  {% endblock %}
+{# transactions - end #}

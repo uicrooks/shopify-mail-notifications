@@ -1,32 +1,22 @@
-<mj-wrapper background-color="{{ style.color.primary }}">
-  <mj-section padding="20px">
-    <mj-column>
-      <mj-text align="center" color="white">
-        <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vero, repellendus.</span>
-      </mj-text>
-    </mj-column>
-  </mj-section>
-
-  <mj-section padding="0 40px">
-    <mj-column>
-      <mj-divider></mj-divider>
-    </mj-column>
-  </mj-section>
-
-  <mj-section padding="20px">
-    <mj-column>
-      <mj-social icon-size="24px" mode="horizontal">
-        {% for element in data.social %}
-          <mj-social-element
-            src="{{ element.icon }}"
-            href="{{ element.url }}"
-            padding="0 5px"
-            color="white"
+{% block footer_outer %}
+  <mj-wrapper padding-top="30px">
+    <mj-section
+      border-top="1px solid {{ style.color.grey }}"
+      padding="30px 0"
+    >
+      <mj-column>
+        {% block footer %}
+          <mj-text
+            color="{{ style.color['grey-dark'] }}"
+            font-size="14px"
+            line-height="1.7"
           >
-            {{ element.name }}
-          </mj-social-element>
-        {% endfor %}
-      </mj-social>
-    </mj-column>
-  </mj-section>
-</mj-wrapper>
+            {% block text %}
+              {{ text | default('If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a>')}}
+            {% endblock %}
+          </mj-text>
+        {% endblock %}
+      </mj-column>
+    </mj-section>
+  </mj-wrapper>
+{% endblock %}

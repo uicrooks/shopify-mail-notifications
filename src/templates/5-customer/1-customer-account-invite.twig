@@ -1,0 +1,45 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Customer account activation
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Activate your account{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}Hi {{ customer.first_name }}, you’ve created a new customer account at {{ shop.name }}. All you have to do is activate it.{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{% if custom_message != blank %}{{ custom_message }}{% else %}Hi {{ customer.first_name }}, you’ve created a new customer account at <a href="{{ shop.url }}">{{ shop.name }}</a>. All you have to do is activate it.{% endif %}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+
+  {% include '@components::local/actions.twig' with {
+    primary: {
+      url: '{{ customer.account_activation_url }}',
+      text: 'Activate your account'
+    }
+  } %}
+{% endblock %}
+{# content - end #}

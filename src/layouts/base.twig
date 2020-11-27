@@ -3,22 +3,29 @@
     <mj-head>
       {# set the title of the document. #}
       <mj-title>
-        {% block title %}{{ data.title }}{% endblock %}
+        {% block title %}
+          {% verbatim %}{{ title }}{% endverbatim %}
+        {% endblock %}
       </mj-title>
 
       {# set the preview that will be displayed in the inbox of the recipient. #}
       <mj-preview>
-        {% block preview %}{{ data.preview }}{% endblock %}
+        {% block preview %}
+          {% verbatim %}{{ preview }}{% endverbatim %}
+
+          {% if production %}
+            {# preview hack #}
+            {% for i in (1..200) %}&zwnj;&nbsp;{% endfor %}
+          {% endif %}
+        {% endblock %}
       </mj-preview>
 
       {#  control on which breakpoint the layout should go desktop/mobile. #}
-      <mj-breakpoint width="{% block breakpoint %}360px{% endblock %}" />
+      <mj-breakpoint width="{% block breakpoint %}{{ style.breakpoint.mobile }}{% endblock %}" />
 
       {#  import fonts #}
       {% block font %}
-        {% if production %}
-          <mj-font name="Open Sans" href="{{ style['google-fonts'] }}" />
-        {% endif %}
+        {# https://mjml.io/documentation/#mj-font #}
       {% endblock %}
 
       {# modify default attributes on a mj-tag and add mj-classes. #}
@@ -29,7 +36,7 @@
       </mj-attributes>
 
       {# set CSS styles that will be applied to the HTML in your MJML document as well as the HTML outputted. #}
-      <mj-style inline="inline">
+      <mj-style>
         {% block style %}
           {% include '@components::global/style.twig' %}
         {% endblock %}
@@ -39,11 +46,15 @@
 
   {% block body %}
     <mj-body>
-      {% include '@components::global/header.twig' %}
+      {% block header %}
+        {% include '@components::global/header.twig' %}
+      {% endblock %}
 
       {% block content %}{% endblock %}
 
-      {% include '@components::global/footer.twig' %}
+      {% block footer %}
+        {% include '@components::global/footer.twig' %}
+      {% endblock %}
     </mj-body>
   {% endblock body %}
 </mjml>

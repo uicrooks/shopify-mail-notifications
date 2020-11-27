@@ -1,0 +1,38 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Message from {{ shop.name }}
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Message from {{ shop.name }}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}{{ custom_message }}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{{ preview }}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+{% endblock %}
+{# content - end #}

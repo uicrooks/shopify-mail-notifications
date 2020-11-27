@@ -1,0 +1,92 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Payment needed to update order
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Payment needed to update order{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}Additional payment of {{ total_outstanding | money }} is needed to update your {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% include '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: 'Additional payment of <strong>{{ total_outstanding | money }}</strong> is needed to update your  <br> {% if custom_message != blank %} {{ custom_message }} {% endif %}'
+  } %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% if checkout_payment_collection_url %}
+    </mj-raw>
+  {% endverbatim %}
+
+    {% embed '@components::local/actions.twig' with {
+      primary: {
+        url: '{{ checkout_payment_collection_url }}',
+        text: 'Pay now'
+      }
+    } %}
+      {% block secondary_outer %}{% endblock %}
+    {% endembed %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Updated order',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in subtotal_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  {% embed '@components::local/totals.twig' %}
+    {% block total %}{% endblock %}
+    {% block total_discounts %}{% endblock %}
+    {% block transactions %}{% endblock %}
+  {% endembed %}
+
+  <mj-section>
+    <mj-column>
+      <mj-spacer height="50px" />
+    </mj-column>
+  </mj-section>
+{% endblock %}
+{# content - end #}

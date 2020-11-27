@@ -1,0 +1,42 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Customer account confirmation
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Welcome to {{ shop.name }}!{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}You’ve activated your customer account. Next time you shop with us, log in for faster checkout.{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{{ preview }}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+
+  {% embed '@components::local/actions.twig' %}
+    {% block secondary_outer %}{% endblock %}
+  {% endembed %}
+{% endblock %}
+{# content - end #}

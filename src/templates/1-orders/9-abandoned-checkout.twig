@@ -1,0 +1,98 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Complete your Purchase
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}
+      {% if item_count == 1 %}
+        You left an item in your cart
+      {% else %}
+        You left items in your cart
+      {% endif %}
+    {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}
+      {% if billing_address.first_name %}
+        {% if item_count == 1 %}
+          Hi {{ billing_address.first_name }}, you added an item to your shopping cart and haven’t completed your purchase. You can complete it now while it’s still available.
+        {% else %}
+          Hi {{ billing_address.first_name }}, you added items to your shopping cart and haven’t completed your purchase. You can complete it now while they’re still available.
+        {% endif %}
+      {% else %}
+        {% if item_count == 1 %}
+          Hi, you added an item to your shopping cart and haven’t completed your purchase. You can complete it now while it’s still available.
+        {% else %}
+          Hi, you added items to your shopping cart and haven’t completed your purchase. You can complete it now while they’re still available.
+        {% endif %}
+      {% endif %}
+    {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{% if custom_message != blank %} {{ custom_message }} {% else %} {{ preview }} {% endif %}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed%}
+
+  {% include '@components::local/actions.twig' with {
+    primary: {
+      url: '{{ url }}',
+      text: 'Items in your cart'
+    }
+  } %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Complete your purchase',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper padding-bottom="20px">
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in subtotal_line_items %}'
+      }}
+    </mj-raw>
+
+      {% embed '@components::local/product.twig' %}
+        {% block right %}{% endblock %}
+      {% endembed %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+{% endblock %}
+{# content - end #}
+
+{# footer - start #}
+{% block footer %}
+  {% include '@components::global/footer.twig' with {
+    text: 'Don’t want to receive cart reminders from us? <a href="{{ unsubscribe_url }}">Unsubscribe</a>'
+  } %}
+{% endblock %}
+{# footer - end #}

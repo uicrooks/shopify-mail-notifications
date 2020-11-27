@@ -1,0 +1,55 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Confirm you want to receive email marketing
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Confirm you want to receive email marketing{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}You need to confirm that you want to receive marketing updates from us. If you didn’t subscribe, then you don’t need to do anything.{% endcapture %}
+
+    {{ parent() }}
+  {% endverbatim %}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{{ preview }}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+
+  {% verbatim %}
+    {% if shop.url %}
+  {% endverbatim %}
+
+  {% embed '@components::local/actions.twig' with {
+    primary: {
+      url: '{{ customer.subscribe_url }}',
+      text: 'Subscribe'
+    }
+  } %}
+    {% block secondary_outer %}{% endblock %}
+  {% endembed %}
+
+  {% verbatim %}
+    {% endif %}
+  {% endverbatim %}
+{% endblock %}
+{# content - end #}

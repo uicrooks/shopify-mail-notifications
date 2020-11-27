@@ -1,0 +1,37 @@
+<mj-section padding="{{ padding | default('0 0 20px') }}">
+  <mj-column>
+    {% block topline_outer %}
+      <mj-text
+        color="{{ style.color['grey-dark'] }}"
+        font-size="16px"
+        padding-bottom="20px"
+      >
+        {% block topline %}
+          {{ topline | default('ORDER {{ name }}') }}
+        {% endblock %}
+      </mj-text>
+    {% endblock %}
+
+    {% block headline_outer %}
+      <mj-text
+        font-size="24px"
+        line-height="1.4"
+        padding-bottom="20px"
+      >
+        {% block headline %}
+          {{ headline | default('Headline') }}
+        {% endblock %}
+      </mj-text>
+    {% endblock %}
+
+    {% block text_outer %}
+      <mj-text
+        font-size="16px"
+        line-height="1.7"
+        color="{{ style.color['grey-dark'] }}"
+      >
+        {% block text %}{{ text | default('Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia optio delectus asperiores architecto cupiditate perferendis aperiam magni veritatis, nulla corrupti?') }}{% endblock %}
+      </mj-text>
+    {% endblock %}
+  </mj-column>
+</mj-section>

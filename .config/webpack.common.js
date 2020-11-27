@@ -23,6 +23,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: 'file-loader'
+      },
+      {
         test: /\.twig$/i,
         use: [
           {
@@ -63,7 +67,25 @@ module.exports = {
                   })
 
                 return data
-              })()
+              })(),
+              filters: {
+                /**
+                 * shopify specific filters
+                 */
+                strip: input => String(input).trim(),
+                where: (input, argument) => input.find(el => el === argument),
+                money: input => {
+                  const str = String(input)
+                  return `$${str.substring(0, str.length - 2)}.${str.substring(str.length - 2)}`
+                },
+                money_with_currency: input => {
+                  const str = String(input)
+                  return `$${str.substring(0, str.length - 2)}.${str.substring(str.length - 2)} USD`
+                },
+                money_without_trailing_zeros: input => `$${String(input).slice(0, -2)}`,
+                shopify_asset_url: input => `${server}/assets/${input}`,
+                format_address: input => `${input.name}<br>${input.company}<br>${input.street}<br>${input.city} ${input.province_code} ${input.zip}<br>${input.country}`
+              }
             }
           }] : [],
           {

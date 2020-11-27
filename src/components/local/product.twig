@@ -1,0 +1,243 @@
+{% block divider_outer %}
+  {% verbatim %}
+    <mj-raw>
+      {% unless forloop.first %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section>
+      <mj-column>
+        <mj-divider />
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endunless %}
+    </mj-raw>
+  {% endverbatim %}
+{% endblock %}
+
+{% block product_outer %}
+  <mj-raw>
+    {% verbatim %}
+      {% assign line_quantity = line.quantity %}
+    {% endverbatim %}
+
+    {% if production %}
+      {% verbatim %}
+        {% if line.line_item %}
+          {% assign line_item = line.line_item %}
+        {% else %}
+          {% assign line_item = line %}
+        {% endif  %}
+      {% endverbatim %}
+    {% else %}
+      {% verbatim %}
+        {% assign line_item = line %}
+      {% endverbatim %}
+    {% endif %}
+  </mj-raw>
+
+  <mj-section padding="20px 0">
+    <mj-column>
+      <mj-table>
+        <tr>
+          {% block left %}
+            {% verbatim %}
+              {% if line_item.image %}
+            {% endverbatim %}
+
+              <td style="width: 60px; padding-right: 15px;">
+                <img
+                  src="{{ development ? server ~ '/assets/product.png' : "{{ line_item | img_url: 'compact_cropped' }}" }}"
+                  width="60px"
+                  height="60px"
+                  style="border: 1px solid {{ style.color.grey }}; vertical-align: middle;"
+                />
+              </td>
+
+            {% verbatim %}
+              {% endif %}
+            {% endverbatim %}
+          {% endblock %}
+
+          {% block middle %}
+            <td>
+              {% block title %}
+                {% verbatim %}
+                  {% if line_item.product.title %}
+                    {% assign line_title = line_item.product.title %}
+                  {% else %}
+                    {% assign line_title = line_item.title %}
+                  {% endif %}
+
+                  <!-- htmlmin:ignore -->
+                  {% if line_quantity < line_item.quantity %}
+                  <!-- htmlmin:ignore -->
+                    {% capture line_display %} {{ line_quantity }} of {{ line_item.quantity }} {% endcapture %}
+                  {% else %}
+                    {% assign line_display = line_item.quantity  %}
+                  {% endif %}
+                {% endverbatim %}
+
+                <div style="font-size: 16px; font-weight: 500;">
+                  {% verbatim %}
+                    {{ line_title }} × {{ line_display }}
+                  {% endverbatim %}
+
+                  {# twig variable: show_sku #}
+                  {% if show_sku %}
+                    {% verbatim %}
+                      {% if line_item.sku != blank %}(SKU: {{ line_item.sku }}){% endif %}
+                    {% endverbatim %}
+                  {% endif %}
+                </div>
+              {% endblock %}
+
+              {% block variant %}
+                {% verbatim %}
+                  {% if line_item.variant.title != 'Default Title' %}
+                {% endverbatim %}
+
+                  <div>
+                    {% verbatim %}
+                      {{ line_item.variant.title }}
+                    {% endverbatim %}
+                  </div>
+
+                {% verbatim %}
+                  {% endif %}
+                {% endverbatim %}
+              {% endblock %}
+
+              {% block selling_plan %}
+                {% verbatim %}
+                  {% if line_item.selling_plan_allocation %}
+                {% endverbatim %}
+
+                  <div style="font-size: 14px;">
+                    {% verbatim %}
+                      {{ line_item.selling_plan_allocation.selling_plan.name }}
+                    {% endverbatim %}
+                  </div>
+
+                {% verbatim %}
+                  {% endif %}
+                {% endverbatim %}
+              {% endblock %}
+
+              {% block refund %}
+                {% verbatim %}
+                  {% if line_item.refunded_quantity > 0 %}
+                {% endverbatim %}
+
+                  <div style="font-size: 14px;">Refunded</div>
+
+                {% verbatim %}
+                  {% endif %}
+                {% endverbatim %}
+              {% endblock %}
+
+              {% block discounts %}
+                {% verbatim %}
+                  {% if line_item.discount_allocations %}
+                    {% for discount_allocation in line_item.discount_allocations %}
+                      {% if discount_allocation.discount_application.target_selection != 'all' %}
+                {% endverbatim %}
+
+                  <span>
+                    <img
+                      src="{% verbatim %}{{ 'notifications/discounttag.png' | shopify_asset_url }}{% endverbatim %}"
+                      width="18px"
+                      height="18px"
+                      style="vertical-align: bottom; padding-right: 4px"
+                    />
+
+                    <span style="color: {{ style.color['grey-dark'] }}; font-size: 14px;">
+                      {% verbatim %}
+                        {{ discount_allocation.discount_application.title | upcase }}
+                        (-{{ discount_allocation.amount | money }})
+                      {% endverbatim %}
+                    </span>
+                  </span>
+
+                {% verbatim %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endverbatim %}
+              {% endblock %}
+            </td>
+          {% endblock %}
+
+          {% block right %}
+            <td style="white-space: nowrap; padding-left: 10px;">
+              {% block original_price %}
+                {% verbatim %}
+                  {% if line_item.original_line_price != line_item.final_line_price %}
+                {% endverbatim %}
+
+                    <div style="text-align: right;">
+                      <del style="font-size: 14px; color: {{ style.color['grey-dark'] }}">
+                        {% verbatim %}
+                          {{ line_item.original_line_price | money }}
+                        {% endverbatim %}
+                      </del>
+                    </div>
+
+                {% verbatim %}
+                  {% endif %}
+                {% endverbatim %}
+              {% endblock %}
+
+              {% block final_price %}
+                {% verbatim %}
+                  {% if line_item.final_line_price > 0 %}
+                {% endverbatim %}
+
+                  <div style="font-size: 16px; font-weight: 500; text-align: right;">
+                    {% verbatim %}
+                      {{ line_item.final_line_price | money }}
+                    {% endverbatim %}
+                  </div>
+
+                  {% verbatim %}
+                    {% if line_item.unit_price_measurement %}
+                  {% endverbatim %}
+
+                    <div style="color: {{ style.color['grey-dark'] }}; font-size: 12px; text-align: right;">
+                      {% verbatim %}
+                        {{ line_item.unit_price | money }} /
+
+                        {% if line_item.unit_price_measurement.reference_value != 1 %}
+                          {{ line_item.unit_price_measurement.reference_value }}
+                        {% endif %}
+
+                        {{ line_item.unit_price_measurement.reference_unit }}
+                      {% endverbatim %}
+                    </div>
+
+                  {% verbatim %}
+                    {% endif %}
+                  {% endverbatim %}
+
+                {% verbatim %}
+                  {% else %}
+                {% endverbatim %}
+
+                  <div style="font-size: 16px; font-weight: 500; text-align: right;">
+                    Free
+                  </div>
+
+                {% verbatim %}
+                  {% endif %}
+                {% endverbatim %}
+              {% endblock %}
+            </td>
+          {% endblock %}
+        </tr>
+      </mj-table>
+    </mj-column>
+  </mj-section>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Order {{ name }} confirmed
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Thank you for your purchase!{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}
+        {% if requires_shipping %}
+          {% case delivery_method %}
+            {% when 'pick-up' %}
+              You’ll receive an email when your order is ready for pickup.
+            {% when 'local' %}
+              Hi {{ customer.first_name }}, we're getting your order ready for delivery.
+            {% else %}
+              Hi {{ customer.first_name }}, we're getting your order ready to be shipped. We will notify you when it has been sent.
+          {% endcase %}
+        {% endif %}
+    {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% include '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{{ preview }}'
+  } %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% if requires_shipping and delivery_instructions != blank %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section padding-bottom="20px">
+      <mj-column>
+        <mj-text
+          font-size="16px"
+          line-height="1.7"
+          color="{{ style.color['grey-dark'] }}"
+        >
+          <strong>Delivery information:</strong> {% verbatim %}{{ delivery_instructions }}{% endverbatim %}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% if order_status_url %}
+    </mj-raw>
+  {% endverbatim %}
+
+    {% include '@components::local/actions.twig' with {
+      primary: {
+        url: '{{ order_status_url }}',
+        text: 'View your order'
+      }
+    } %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% else %}
+    </mj-raw>
+  {% endverbatim %}
+
+    {% embed '@components::local/actions.twig' %}
+      {% block secondary_outer %}{% endblock %}
+    {% endembed%}
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+
+  {% include '@components::local/gift-card-notice.twig' %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Order summery',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in subtotal_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  {% embed '@components::local/totals.twig' %}
+    {% block outstanding %}{% endblock %}
+  {% endembed %}
+
+  <mj-section>
+    <mj-column>
+      <mj-spacer height="50px" />
+    </mj-column>
+  </mj-section>
+
+  {% include '@components::local/customer-information.twig' %}
+{% endblock %}
+{# content - end #}
+
+{# footer - start #}
+{% block footer %}
+  {{ parent() }}
+
+  {% if production %}
+    <mj-raw>
+      {% verbatim %}
+        {% if shop.terms_of_service.body != blank %}
+          {{ shop.terms_of_service | attach_as_pdf: "Terms of Service" }}
+        {% endif %}
+
+        {% if shop.refund_policy.body != blank %}
+          {{ shop.refund_policy | attach_as_pdf: "Refund Policy" }}
+        {% endif %}
+      {% endverbatim %}
+    </mj-raw>
+  {% endif %}
+{% endblock %}
+{# footer - end #}

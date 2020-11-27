@@ -1,0 +1,34 @@
+{% verbatim %}
+  <mj-raw>
+    {% if fulfillment.tracking_numbers.size > 0 %}
+  </mj-raw>
+{% endverbatim %}
+
+  <mj-section padding="{{ padding | default('0 0 20px') }}">
+    <mj-column>
+      <mj-text
+        font-size="16px"
+        line-height="1.7"
+        color="{{ style.color['grey-dark'] }}"
+      >
+        {% verbatim %}
+          {% if fulfillment.tracking_numbers.size == 1 and fulfillment.tracking_company and fulfillment.tracking_url %}
+            {{ fulfillment.tracking_company }} tracking number: <a href="{{ fulfillment.tracking_url }}">{{ fulfillment.tracking_numbers.first }}</a>
+          {% elsif fulfillment.tracking_numbers.size == 1 %}
+            Tracking number: {{ fulfillment.tracking_numbers.first }}
+          {% else %}
+            Tracking numbers:<br>
+            {% for tracking_number in fulfillment.tracking_numbers %}
+              {{ tracking_number }}<br>
+            {% endfor %}
+          {% endif %}
+        {% endverbatim %}
+      </mj-text>
+    </mj-column>
+  </mj-section>
+
+{% verbatim %}
+  <mj-raw>
+    {% endif %}
+  </mj-raw>
+{% endverbatim %}

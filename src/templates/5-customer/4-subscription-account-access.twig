@@ -1,0 +1,47 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # Manage subscription
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Manage your subscription{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}Follow the link to manage your subscription orders at {{ shop.name }}.{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: 'Follow the link to manage your subscription orders at <a href="{{ shop.url }}">{{ shop.name }}</a>.'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+
+  {% embed '@components::local/actions.twig' with {
+    primary: {
+      url: '{{ authentication_link }}',
+      text: 'Manage subscription'
+    }
+  } %}
+    {% block secondary_outer %}{% endblock %}
+  {% endembed %}
+{% endblock %}
+{# content - end #}

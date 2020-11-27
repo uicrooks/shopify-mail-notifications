@@ -1,0 +1,90 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # {{ shop.name }} {{ gift_card.balance | money_without_trailing_zeros }} gift card
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}Your gift card{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}
+        {% if gift_card.expires_on %}
+          Your {{ gift_card.balance | money_without_trailing_zeros }} gift card for {{ shop.name }} is active. Keep this email or write down your gift card number. This gift card expires on {{ gift_card.expires_on }}.
+        {% else %}
+          Your {{ gift_card.balance | money_without_trailing_zeros }} gift card for {{ shop.name }} is active. Keep this email or write down your gift card number.
+        {% endif %}
+    {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: '{{ title }}',
+    text: '{{ preview }}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+
+  <mj-section>
+    <mj-column>
+      <mj-image
+        src="{% verbatim %}{{ 'gift-card/card.jpg' | shopify_asset_url }}{% endverbatim %}"
+        alt="Gift card image"
+        width="240px"
+        height="160px"
+        padding="20px 0"
+      />
+    </mj-column>
+  </mj-section>
+
+  {% embed '@components::local/actions.twig' with {
+    primary: {
+      url: '{{ gift_card.url }}',
+      text: 'View gift card'
+    }
+  } %}
+    {% block secondary_outer %}{% endblock %}
+  {% endembed %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% if gift_card.pass_url %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section>
+      <mj-column>
+        <mj-image
+          src="{% verbatim %}{{ 'gift-card/add-to-apple-wallet.png' | shopify_asset_url }}{% endverbatim %}"
+          alt="Add to Apple Wallet"
+          href="{% verbatim %}{{ gift_card.pass_url }}{% endverbatim %}"
+          width="120px"
+          height="38px"
+          padding="20px 0"
+        />
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+{% endblock %}
+{# content - end #}

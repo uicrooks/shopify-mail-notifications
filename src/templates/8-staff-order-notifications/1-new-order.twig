@@ -1,0 +1,209 @@
+{% extends '@layouts::base.twig' %}
+
+{#
+ # Email subject
+ # ---
+ # [{{ shop.name }}] Order {{ name }}{% if customer.name %} placed by {{ customer.name }}{% endif %}{% if has_high_risks? %} (Risk of fraud){% endif %}
+ #}
+
+{# title - start #}
+{% block title %}
+  {% verbatim %}
+    {% capture title %}[{{ shop.name }}] Order {{ name }}{% if customer.name %} placed by {{ customer.name }}{% endif %}{% if has_high_risks? %} (Risk of fraud){% endif %}{% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# title - end #}
+
+{# preview - start #}
+{% block preview %}
+  {% verbatim %}
+    {% capture preview %}
+      {% assign current_date = date | date: "%b %d" %}
+      {% assign current_time = date | date: "%l:%M %P" %}
+
+      {% if customer.name %}
+        {{ customer.name }} placed order {{ name }} on {{ current_date }} at {{ current_time }}.
+      {% else %}
+        Someone placed order {{ name }} on {{ current_date }} at {{ current_time }}.
+      {% endif %}
+    {% endcapture %}
+  {% endverbatim %}
+
+  {{ parent() }}
+{% endblock %}
+{# preview - end #}
+
+{# content - start #}
+{% block content %}
+  {% embed '@components::local/intro-text.twig' with {
+    headline: 'Hello {{ shop.name }}',
+    text: '{{ preview }}'
+  } %}
+    {% block topline_outer %}{% endblock %}
+  {% endembed %}
+
+  {% embed '@components::local/actions.twig' with {
+    primary: {
+      url: 'https://{{ shop.permanent_domain }}/admin/orders/{{ id }}',
+      text: 'View order {{ name }}'
+    }
+  } %}
+    {% block secondary_outer %}{% endblock %}
+  {% endembed %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% if fulfillment_aborted %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section padding-bottom="20px">
+      <mj-column border-left="2px solid {{ style.color['red'] }}">
+        <mj-text
+          font-size="16px"
+          line-height="1.7"
+          color="{{ style.color['red-dark'] }}"
+          container-background-color="{{ style.color['red-light'] }}"
+          padding="20px"
+        >
+          The above order was not automatically fulfilled because it was flagged as suspicious.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+
+  {% verbatim %}
+    <mj-raw>
+      {% if has_high_risks? %}
+    </mj-raw>
+  {% endverbatim %}
+
+    <mj-section padding-bottom="20px">
+      <mj-column border-left="2px solid {{ style.color['red'] }}">
+        <mj-text
+          font-size="16px"
+          line-height="1.7"
+          color="{{ style.color['red-dark'] }}"
+          container-background-color="{{ style.color['red-light'] }}"
+          padding="20px"
+        >
+          <strong>Security check:</strong><br>
+          This order has a risk of being fraudulent. Review the order in your store's admin and contact the customer to verify their information.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+  {% verbatim %}
+    <mj-raw>
+      {% endif %}
+    </mj-raw>
+  {% endverbatim %}
+
+  {% include '@components::local/headline.twig' with {
+    headline: 'Ordered items',
+    padding: '20px 0 5px'
+  } %}
+
+  <mj-wrapper>
+    <mj-raw>
+      {{ development
+        ? '{% for line in line_items %}{% for i in (1..2) %}'
+        : '{% for line in subtotal_line_items %}'
+      }}
+    </mj-raw>
+
+      {% include '@components::local/product.twig' with {
+        show_sku: true
+      } %}
+
+    <mj-raw>
+      {{ development
+        ? '{% endfor %}{% endfor %}'
+        : '{% endfor %}'
+      }}
+    </mj-raw>
+  </mj-wrapper>
+
+  <mj-section>
+    <mj-column>
+      <mj-spacer height="50px" />
+    </mj-column>
+  </mj-section>
+
+  {# payment method - start #}
+    {% verbatim %}
+      <mj-raw>
+        {% if gateway %}
+      </mj-raw>
+    {% endverbatim %}
+
+      <mj-section padding-bottom="20px">
+        <mj-column>
+          <mj-text
+            font-size="16px"
+            line-height="1.7"
+            color="{{ style.color['grey-dark'] }}"
+          >
+            <strong>Payment processing method:</strong><br>
+            {% verbatim %}{{ gateway }}{% endverbatim %}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+    {% verbatim %}
+      <mj-raw>
+        {% endif %}
+      </mj-raw>
+    {% endverbatim %}
+  {# payment method - end #}
+
+  {# shipping - start #}
+    {% verbatim %}
+      <mj-raw>
+        {% if requires_shipping and shipping_address %}
+      </mj-raw>
+    {% endverbatim %}
+
+      <mj-section padding-bottom="20px">
+        <mj-column>
+          <mj-text
+            font-size="16px"
+            line-height="1.7"
+            color="{{ style.color['grey-dark'] }}"
+          >
+            {% verbatim %}
+              <strong>Delivery method:</strong><br>
+
+              {% for shipping_method in shipping_methods %}
+                {{ shipping_method.title }}<br>
+              {% endfor %}
+            {% endverbatim %}
+
+            {% verbatim %}
+              <br>
+              <strong>Shipping address:</strong><br>
+              {{ shipping_address.name }}<br>
+              {{ shipping_address.address1 }}<br>
+              {{ shipping_address.city }}, {{ shipping_address.province }} {{ shipping_address.zip }}<br>
+              {{ shipping_address.country }}<br>
+              {{ shipping_address.phone }}
+            {% endverbatim %}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+
+    {% verbatim %}
+      <mj-raw>
+        {% endif %}
+      </mj-raw>
+    {% endverbatim %}
+  {# shipping - end #}
+{% endblock %}
+{# content - end #}
