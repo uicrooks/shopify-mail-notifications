@@ -14,6 +14,10 @@
 Blazing fast templating environment for Shopify mail notifications with Liquid, ✉ MJML + 🌿 Twig. Create responsive emails quickly with less code.
 <!-- title / description (end) -->
 
+<p align="center">
+  <img src=".github/img/screens.png">
+</p>
+
 <!-- toc (start) -->
 ## Table of contents
 - [Features](#features)
