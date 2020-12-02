@@ -65,7 +65,7 @@ $ npm run dev
 ```shell
 $ yarn import # migrate package-lock.json to yarn.lock
 $ rm package-lock.json # or delete manually
-$ yarn install
+$ yarn install --force
 ```
 
 ```shell
