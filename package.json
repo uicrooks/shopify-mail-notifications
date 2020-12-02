@@ -1,8 +1,12 @@
 {
   "name": "shopify-mail-notifications",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Sergej Samsonenko <contact@sergej.codes>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uicrooks/shopify-mail-notifications"
+  },
   "config": {
     "devServerPort": 8080
   },
