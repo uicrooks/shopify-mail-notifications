@@ -11,7 +11,7 @@
 <!-- title / description (start) -->
 <h2 align="center">Shopify Mail Notifications</h2>
 
-Blazing fast templating environment for Shopify mail notifications with Liquid, ✉ MJML + 🌿 Twig. Create responsive emails quickly with less code.
+Blazing-fast templating environment for Shopify mail notifications with Liquid, ✉ MJML + 🌿 Twig. Create responsive emails quickly with less code.
 <!-- title / description (end) -->
 
 <p align="center">
