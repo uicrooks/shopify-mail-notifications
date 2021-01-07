@@ -92,13 +92,7 @@ module.exports = {
             loader: 'webpack-mjml-loader',
             options: {
               filePath: path.resolve(__dirname, '../src'),
-              keepComments: process.env.NODE_ENV !== 'production',
-              minify: process.env.NODE_ENV === 'production',
-              minifyOptions: {
-                'collapseWhitespace': true,
-                'minifyCSS': true,
-                'removeEmptyAttributes': true
-              }
+              keepComments: process.env.NODE_ENV !== 'production'
             }
           },
           {
