@@ -78,7 +78,7 @@ If the server port is already in use, adjust `devServerPort` in `package.json`
 
 <!-- production (start) -->
 ## Production
-Generate minified `.html` files in `dist/` directory:
+Generate minified `.liquid` files in `dist/` directory:
 
 ### npm
 
