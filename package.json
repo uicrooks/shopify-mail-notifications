@@ -1,40 +1,36 @@
 {
   "name": "shopify-mail-notifications",
-  "version": "1.1.2",
-  "author": "Sergej Samsonenko <contact@sergej.codes>",
+  "version": "1.2.0",
+  "author": "Sergej Samsonenko",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/uicrooks/shopify-mail-notifications"
-  },
   "config": {
     "devServerPort": 8080
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack serve --config .config/webpack.dev.js",
-    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config .config/webpack.prod.js && rm dist/main.js && rm dist/index.liquid"
+    "dev": "cross-env NODE_ENV=development webpack serve -c .config/webpack.dev.js",
+    "build": "cross-env NODE_ENV=production webpack -c .config/webpack.prod.js && rm dist/main.js && rm dist/index.liquid"
   },
   "devDependencies": {
-    "boxen": "^5.0.0",
-    "chalk": "^4.1.0",
+    "boxen": "^5.0.1",
+    "chalk": "^4.1.1",
     "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^7.0.0",
+    "copy-webpack-plugin": "^9.0.1",
     "cross-env": "^7.0.3",
     "extract-loader": "^5.1.0",
     "file-loader": "^6.2.0",
-    "fs-extra": "^9.1.0",
-    "html-minimizer-webpack-plugin": "^2.1.0",
-    "js-yaml": "^4.0.0",
+    "fs-extra": "^10.0.0",
+    "html-minimizer-webpack-plugin": "^3.1.1",
+    "js-yaml": "^4.1.0",
     "liquid-template-loader": "^0.2.2",
-    "mjml": "^4.8.1",
+    "mjml": "^4.10.1",
     "progress-webpack-plugin": "^1.0.12",
     "require-context": "^1.1.0",
-    "twig-html-loader": "^0.1.8",
-    "webpack": "^5.21.1",
-    "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2",
+    "twig-html-loader": "^0.1.9",
+    "webpack": "^5.45.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^4.0.0-beta.3",
     "webpack-html-script-insert-loader": "^0.0.5",
-    "webpack-merge": "^5.7.3",
+    "webpack-merge": "^5.8.0",
     "webpack-mjml-loader": "^1.1.0"
   }
 }

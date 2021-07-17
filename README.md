@@ -121,7 +121,7 @@ It's important to understand in which order webpack transforms the code. First, 
 - Data from `src/data/shopify/` is available during `liquid` compilation in development.
 - If you want to write `liquid` tags instead of `twig` tags, you have to escape them with `{% verbatim %}{% endverbatim %}` [about verbatim](https://twig.symfony.com/doc/2.x/tags/verbatim.html).
 - You might get a Parsing error, especially when using the `<` character in `liquid` tags, use `<!-- htmlmin:ignore -->{% if foo < 5 %}<!-- htmlmin:ignore -->` for a fix.
-- Some Shopify specific filters might not exist in the liquid compiler. To fix this for development, you can add additional filters to the `filter` section inside `.config/webpack.common.js`.
+- Some Shopify specific filters might not exist in the liquid compiler. To fix this for development, you can add additional filters to the `filters` section inside `.config/webpack.common.js`.
 
 ### Additional docs
 - [MJML docs](https://documentation.mjml.io/)
