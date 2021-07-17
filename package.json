@@ -1,18 +1,14 @@
 {
   "name": "shopify-mail-notifications",
   "version": "1.1.2",
-  "author": "Sergej Samsonenko <contact@sergej.codes>",
+  "author": "Sergej Samsonenko",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/uicrooks/shopify-mail-notifications"
-  },
   "config": {
     "devServerPort": 8080
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development ./node_modules/.bin/webpack serve --config .config/webpack.dev.js",
-    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config .config/webpack.prod.js && rm dist/main.js && rm dist/index.liquid"
+    "dev": "cross-env NODE_ENV=development webpack serve -c .config/webpack.dev.js",
+    "build": "cross-env NODE_ENV=production webpack -c .config/webpack.prod.js && rm dist/main.js && rm dist/index.liquid"
   },
   "devDependencies": {
     "boxen": "^5.0.0",
