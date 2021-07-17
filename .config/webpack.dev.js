@@ -20,15 +20,7 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    // index: 'index.html',
     port: package.config.devServerPort,
-    writeToDisk: true,
-    liveReload: true,
-    stats: 'minimal',
-    overlay: true,
-    contentBase: '/',
-    contentBasePublicPath: '/',
-    publicPath: '/',
     historyApiFallback: {
       rewrites: [
         {
